@@ -1,0 +1,121 @@
+:root {
+    --elem-radius: 0.25rem;
+    --main-padding: 20px;
+  }
+
+html, body, .wrapper{
+    margin: 0px;
+    padding:0px;
+    height: 100%;
+    width:100%;
+}
+
+body{
+    font-family: "Open Sans", Helvetica;
+    background-color: #1b1b1b;
+    color:#dddddd;
+}
+
+header{
+    padding:0.5em;
+    background-color: #343434;
+}
+
+header h1{
+    color:#cdcdcd;
+    font-size: 1em;
+}
+
+.horizontal-container{
+    column-gap: 1em;
+    display: flex;
+    flex-direction: row;
+}
+
+.vertical-container{
+    row-gap: 0.5em;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper{
+    position: absolute;
+}
+
+.main{
+    padding:20px;
+    flex-grow: 1
+;}
+
+.sidebar{
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    margin: 0.5em 0em 0.5em 0em;
+}
+
+input, textarea, #test-strings-output{
+    padding:0.4em;
+    font-size: 1.3em;
+    border-radius: var(--elem-radius);
+    color:#dddddd;
+    background-color: #343434;
+    border:1px solid #323232;
+}
+
+textarea:focus, input:focus{
+    outline: 1px solid #888888;
+}
+
+.label-for-test-string-input{
+    clear: both;
+    display: block;
+}
+
+#test-strings-input-container{
+    position: relative;
+    width: 100%;
+}
+
+/* #test-strings-input, #test-strings-output
+    are overlapping elements and should have the same style
+
+    see: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/
+*/
+#test-strings-input, #test-strings-output {
+    resize: none;
+    position: absolute;
+    font-size: 15pt;
+    padding: 10px;
+    border: 0;
+    width: calc(100% - var(--main-padding));
+    height: 20em;
+    line-height: 20pt;
+    margin:0px;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+/* The input is made invisible except for the caret.
+    The user should only see #test-strings-output
+*/
+#test-strings-input {
+    color: transparent;
+    background: transparent;
+    caret-color: white; /* Or choose your favorite color */
+}
+
+/*
+When the user clicks on the input/output. The focus should go to textarea.
+#test-strings-input therefor should have an higher z-index
+*/
+#test-strings-input {
+    z-index: 1;
+}
+  
+#test-strings-output {
+    z-index: 0;
+}
