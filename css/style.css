@@ -25,13 +25,18 @@ body,
 /*
 PHONE LAYOUT
 */
-@media (max-width:1024px){
+@media (max-width:1024px) {
     .main {
         column-gap: 1em;
         display: flex;
         flex-direction: column;
     }
+
+    .center {
+        order: -1;
+    }
 }
+
 /*
 DESKTOP LAYOUT
 */
@@ -42,12 +47,13 @@ DESKTOP LAYOUT
         flex-direction: row;
     }
 
-    .sidebar-left, .sidebar-right{
+    .sidebar-left,
+    .sidebar-right {
         flex-basis: 192px;
         flex-grow: 1;
     }
 
-    .center{
+    .center {
         flex-basis: 640px;
         flex-grow: 10;
     }
@@ -67,7 +73,8 @@ DESKTOP LAYOUT
     padding: var(--main-padding);
 }
 
-.sidebar-left, .sidebar-right {
+.sidebar-left,
+.sidebar-right {
     overflow: auto;
     row-gap: 1em;
     display: flex;
@@ -84,6 +91,7 @@ header {
 }
 
 header h1 {
+
     color: #cdcdcd;
     font-size: 1em;
 }
@@ -162,7 +170,7 @@ TEST STRINGS FORM
 /*
 Empty container that fills up space in flexbox
 */
-.test-strings-input-container-space{
+.test-strings-input-container-space {
     height: 20rem;
 }
 
