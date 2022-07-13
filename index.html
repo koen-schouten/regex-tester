@@ -15,21 +15,33 @@
         </header>
 
         <div class="horizontal-container">
-            <div class="sidebar vertical-container">
+            <div class="sidebar-left vertical-container">
                 SideBar, Here should all examples go.
             </div>
             <div class="main vertical-container">
-                <div class="vertical-container">
+                <!-- REGEX INPUT CONTAINER -->
+                <div class="input-block">
                     <label for="regex-input">Regular Expression</label>
-                    <input type="text" id="regex-input" value=""/>
+                    <input type="text" id="regex-input" value="" />
                 </div>
-                <div id="test-strings-input-container">
-                    <label class="label-for-test-string-input" 
-                        for="test-strings-input">Test Strings</label>
-                    <textarea type="text" id="test-strings-input" spellcheck="false"></textarea>
-                    <pre id="test-strings-output" aria-hidden="true">
-                    </pre>
+
+                <!-- TEST STRING INPUT CONTAINER -->
+                <div class="input-block">
+                    <label class="label-for-test-string-input" for="test-strings-input">Test Strings</label>
+                    <div id="test-strings-input-container">
+                        <textarea type="text" id="test-strings-input" spellcheck="false"></textarea>
+                        <pre id="test-strings-output" aria-hidden="true"></pre>
+                    </div>
                 </div>
+
+                <p>1</p>
             </div>
+
+            <div class="sidebar-right vertical-container">
+                SideBar, Here should all examples go.
+            </div>
+
+
         </div>
+    </div>
 </body>

@@ -1,100 +1,122 @@
 :root {
     --elem-radius: 0.25rem;
     --main-padding: 20px;
-  }
-
-html, body, .wrapper{
-    margin: 0px;
-    padding:0px;
-    height: 100%;
-    width:100%;
 }
 
-body{
+/*
+MAIN LAYOUT
+*/
+
+html,
+body,
+.wrapper {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+}
+
+body {
     font-family: "Open Sans", Helvetica;
     background-color: #1b1b1b;
-    color:#dddddd;
+    color: #dddddd;
 }
-
-header{
-    padding:0.5em;
-    background-color: #343434;
-}
-
-header h1{
-    color:#cdcdcd;
-    font-size: 1em;
-}
-
-.horizontal-container{
+.horizontal-container {
     column-gap: 1em;
     display: flex;
     flex-direction: row;
 }
 
-.vertical-container{
-    row-gap: 0.5em;
+.vertical-container {
+    row-gap: 1em;
     display: flex;
     flex-direction: column;
 }
 
-.wrapper{
+.wrapper {
     position: absolute;
 }
 
-.main{
-    padding:20px;
-    flex-grow: 1
-;}
-
-.sidebar{
-    padding:20px;
-    display: flex;
-    flex-direction: column;
+.main {
+    align-items: stretch;
+    padding: var(--main-padding);
+    flex-grow: 3;
 }
 
-label{
-    margin: 0.5em 0em 0.5em 0em;
+.sidebar-left, .sidebar-right {
+    padding: var(--main-padding);
+    flex-grow: 1;
 }
 
-input, textarea, #test-strings-output{
-    padding:0.4em;
-    font-size: 1.3em;
-    border-radius: var(--elem-radius);
-    color:#dddddd;
+/*
+HEADER
+*/
+header {
+    padding: 0.5em;
     background-color: #343434;
-    border:1px solid #323232;
 }
 
-textarea:focus, input:focus{
+header h1 {
+    color: #cdcdcd;
+    font-size: 1em;
+}
+
+/*
+FORM
+*/
+label {
+    text-transform: uppercase;
+}
+
+input,
+textarea,
+#test-strings-output {
+    margin: 0px;
+    padding: 0.3em;
+    font-size: 1rem;
+    border-radius: var(--elem-radius);
+    color: #dddddd;
+    background-color: #343434;
+    border: 1px solid #323232;
+    line-height: 1.5em;
+}
+
+textarea:focus,
+input:focus {
     outline: 1px solid #888888;
 }
 
-.label-for-test-string-input{
+.input-block {
+    position: relative;
+    width: 100%;
+}
+
+.input-block>label {
+    margin: 1rem 0 1rem 0;
     clear: both;
     display: block;
 }
 
-#test-strings-input-container{
-    position: relative;
+.input-block>input,
+.input-block>textarea {
     width: 100%;
 }
+
+/*
+TEST STRINGS FORM
+*/
 
 /* #test-strings-input, #test-strings-output
     are overlapping elements and should have the same style
 
     see: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/
 */
-#test-strings-input, #test-strings-output {
+#test-strings-input,
+#test-strings-output {
+    width: 100%;
     resize: none;
     position: absolute;
-    font-size: 15pt;
-    padding: 10px;
-    border: 0;
-    width: calc(100% - var(--main-padding));
     height: 20em;
-    line-height: 20pt;
-    margin:0px;
     overflow: auto;
     white-space: pre-wrap;
 }
@@ -105,7 +127,8 @@ textarea:focus, input:focus{
 #test-strings-input {
     color: transparent;
     background: transparent;
-    caret-color: white; /* Or choose your favorite color */
+    caret-color: white;
+    /* Or choose your favorite color */
 }
 
 /*
@@ -115,7 +138,7 @@ When the user clicks on the input/output. The focus should go to textarea.
 #test-strings-input {
     z-index: 1;
 }
-  
+
 #test-strings-output {
     z-index: 0;
 }
