@@ -112,7 +112,7 @@ textarea,
     border-radius: var(--elem-radius);
     color: #dddddd;
     background-color: #343434;
-    border: 1px solid #323232;
+    border: 1px solid #444;
     line-height: 1.5em;
 }
 
