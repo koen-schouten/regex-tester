@@ -1,11 +1,14 @@
 const regexEvaluator = (function () {
 
-    let regex = new RegExp();
+    let regex;
     let testStrings = [];
 
     function setRegex(expr, flags = "g") {
-        regex = new RegExp(expr, flags)
-        console.log(regex);
+        if(expr.length > 0){
+            regex = new RegExp(expr, flags)
+        }else{
+            regex = null;
+        }
     }
 
     function getRegex() {
@@ -14,24 +17,83 @@ const regexEvaluator = (function () {
 
     function setTestStrings(...strings) {
         testStrings = strings;
-        console.log(testStrings);
-
     }
+
+    function _evaluateRegex(){
+        let results = [];
+
+        //
+        // TODO: Make this function work for non global regex
+        //
+        // For now this only works for GLOBAL regex because the callback substr.replace 
+        // is called for every match when using global regex. 
+        // As is if it were replaceAll.
+        //  
+        testStrings.forEach((str)=>{
+            let result = "";
+            let index = 0;
+            let substr;
+
+            while(index < str.length){
+                substr = str.substring(index, str.length)
+                //check if substring contains regex
+                if(substr.search(regex) != -1){
+                    //If it contain the regex, surround the found match by mark.
+                    //Everything befor the match should be surrounded by span elements (Maybe?)
+                    substr.replace(regex, (match, offset, string) => {
+                        if(match){
+                            // Before the match
+                            if(offset > index){
+                                result = result + "<span>" + str.substring(index, offset) + "</span>";
+                            }
+                            //The match
+                            result = result + "<mark>" + _escapeHTML(match) + "</mark>";
+                            //move index to after match
+                            index = offset + match.length;
+                        }
+                    })
+                }
+
+                //If not match is found put the remaining substr between span tags at the end of the string
+                // and break the loop
+                else{
+                    if(index < str.length){
+                        result = result + "<span>" + _escapeHTML(substr) + "</span>";
+                    }
+                    break;
+                }
+            }
+            results.push(result);
+        })
+
+        return results;
+    }
+
+    function _escapeHTML(unsafe) {
+        return unsafe.replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
+    }
+
 
     function getTestStrings(...strings) {
         return testStrings;
     }
 
-    function regexUpdatedHandler(origin) {
-        setRegex(origin.getRegexString());
+    function regexUpdatedHandler() {
+        setRegex(regexInput.getRegexString());
+        testStringsInput.setTestStringsOutputElement(_evaluateRegex());
     }
 
-    function testStringUpdatedHandler(origin) {
-        setTestStrings(origin, getTestStrings());
+    function testStringUpdatedHandler() {
+        setTestStrings(testStringsInput.getTestStrings());
+        testStringsInput.setTestStringsOutputElement(_evaluateRegex());
     }
 
     function init() {
-        console.log("test");
+        setRegex("");
     }
 
     return {
@@ -105,6 +167,7 @@ const testStringsInput = (function () {
 
     function registerObserver(fn) {
         observers.push(fn);
+        _notifyObservers();
     }
 
     function unregisterObserver(fn) {
@@ -121,7 +184,8 @@ const testStringsInput = (function () {
         "init": init,
         "getTestStrings": getTestStrings,
         "registerObserver": registerObserver,
-        "unregisterObserver": unregisterObserver
+        "unregisterObserver": unregisterObserver,
+        "setTestStringsOutputElement": setTestStringsOutputElement
 
     }
 })();
@@ -148,6 +212,7 @@ const regexInput = (function () {
 
     function registerObserver(fn) {
         observers.push(fn);
+        _notifyObservers();
     }
 
     function unregisterObserver(fn) {
@@ -170,7 +235,6 @@ const regexInput = (function () {
 
 
 function init() {
-    regexEvaluator.init();
 
     const regexInputElement = document.getElementById("regex-input");
     const testStringsInputElement = document.getElementById("test-strings-input");
@@ -181,6 +245,9 @@ function init() {
 
     testStringsInput.registerObserver(regexEvaluator.testStringUpdatedHandler);
     regexInput.registerObserver(regexEvaluator.regexUpdatedHandler);
+
+    regexEvaluator.init();
+
 }
 
 //======================
