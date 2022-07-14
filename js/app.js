@@ -5,9 +5,9 @@ const regexEvaluator = (function () {
 
     function setRegex(expr, flags = "g") {
         if (expr.length > 0) {
-            try{
+            try {
                 regex = new RegExp(expr, flags)
-            } catch(e){
+            } catch (e) {
                 regex = null;
             }
         } else {
@@ -56,11 +56,11 @@ const regexEvaluator = (function () {
                         let string = args[args.length - 1]
                         let groups = args[args.length]
 
-                        // Before the match
+                        // Formating text before match
                         if (offset > index) {
                             result = result + "<span>" + str.substring(index, offset) + "</span>";
                         }
-                        //The match
+                        // Formating the match
                         result = result + "<mark>" + _escapeHTML(match) + "</mark>";
                         //move index to after match
                         index = offset + match.length;
@@ -119,6 +119,10 @@ const regexEvaluator = (function () {
         "testStringUpdatedHandler": testStringUpdatedHandler
     }
 })();
+
+//
+// TODO: Make teststrings savable
+//
 
 // In order to have an Editable Textarea that can also be styled,
 // we need to create 2 seperate elements that are duplicates. 
@@ -198,6 +202,9 @@ const testStringsInput = (function () {
     }
 })();
 
+
+// TODO: Add menu for picking regex flags
+// TODO: Make regex savable
 const regexInput = (function () {
     let regexInputElement;
     const observers = []
