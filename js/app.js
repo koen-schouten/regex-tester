@@ -91,7 +91,7 @@ const regexEvaluator = (function () {
     }
 
 
-    function getTestStrings(...strings) {
+    function getTestStrings() {
         return testStrings;
     }
 
