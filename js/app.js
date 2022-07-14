@@ -4,9 +4,9 @@ const regexEvaluator = (function () {
     let testStrings = [];
 
     function setRegex(expr, flags = "g") {
-        if(expr.length > 0){
+        if (expr.length > 0) {
             regex = new RegExp(expr, flags)
-        }else{
+        } else {
             regex = null;
         }
     }
@@ -19,7 +19,7 @@ const regexEvaluator = (function () {
         testStrings = strings;
     }
 
-    function _evaluateRegex(){
+    function _evaluateRegex() {
         let results = [];
 
         //
@@ -29,35 +29,44 @@ const regexEvaluator = (function () {
         // is called for every match when using global regex. 
         // As is if it were replaceAll.
         //  
-        testStrings.forEach((str)=>{
+
+        //
+        // TODO: Make this function work for named capture groups
+        // 
+        testStrings.forEach((str) => {
             let result = "";
             let index = 0;
             let substr;
 
-            while(index < str.length){
+            while (index < str.length) {
                 substr = str.substring(index, str.length)
                 //check if substring contains regex
-                if(substr.search(regex) != -1){
+                if (substr.search(regex) != -1) {
                     //If it contain the regex, surround the found match by mark.
                     //Everything befor the match should be surrounded by span elements (Maybe?)
-                    substr.replace(regex, (match, offset, string) => {
-                        if(match){
-                            // Before the match
-                            if(offset > index){
-                                result = result + "<span>" + str.substring(index, offset) + "</span>";
-                            }
-                            //The match
-                            result = result + "<mark>" + _escapeHTML(match) + "</mark>";
-                            //move index to after match
-                            index = offset + match.length;
+                    substr.replace(regex, (...args) => {
+                        //Capture all arguments from replacerfunction
+                        let match = args[0]
+                        let captureGroups = args[1, args.length - 2]
+                        let offset = args[args.length - 2]
+                        let string = args[args.length - 1]
+                        let groups = args[args.length]
+
+                        // Before the match
+                        if (offset > index) {
+                            result = result + "<span>" + str.substring(index, offset) + "</span>";
                         }
+                        //The match
+                        result = result + "<mark>" + _escapeHTML(match) + "</mark>";
+                        //move index to after match
+                        index = offset + match.length;
                     })
                 }
 
                 //If not match is found put the remaining substr between span tags at the end of the string
                 // and break the loop
-                else{
-                    if(index < str.length){
+                else {
+                    if (index < str.length) {
                         result = result + "<span>" + _escapeHTML(substr) + "</span>";
                     }
                     break;
@@ -129,12 +138,6 @@ const testStringsInput = (function () {
     function setupEventListeners() {
         testStringsInputElement.addEventListener("input", (event) => {
             event.preventDefault();
-            result = event.target.value;
-            if (result[result.length - 1] == "\n") { // If the last character is a newline character
-                result += " "; // Add a placeholder space character to the final line 
-            }
-
-            testStringsOutputElement.innerHTML = escapeHTML(result);
             syncscroll();
             _notifyObservers();
         })
@@ -163,6 +166,7 @@ const testStringsInput = (function () {
 
     function setTestStringsOutputElement(value) {
         testStringsOutputElement.innerHTML = value;
+        syncscroll();
     }
 
     function registerObserver(fn) {
