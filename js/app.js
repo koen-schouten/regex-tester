@@ -5,7 +5,11 @@ const regexEvaluator = (function () {
 
     function setRegex(expr, flags = "g") {
         if (expr.length > 0) {
-            regex = new RegExp(expr, flags)
+            try{
+                regex = new RegExp(expr, flags)
+            } catch(e){
+                regex = null;
+            }
         } else {
             regex = null;
         }
