@@ -1,29 +1,5 @@
 const regexEvaluator = (function () {
-
-    let regex;
-    let testStrings = [];
-
-    function setRegex(expr, flags = "g") {
-        if (expr.length > 0) {
-            try {
-                regex = new RegExp(expr, flags)
-            } catch (e) {
-                regex = null;
-            }
-        } else {
-            regex = null;
-        }
-    }
-
-    function getRegex() {
-        return regex;
-    }
-
-    function setTestStrings(...strings) {
-        testStrings = strings;
-    }
-
-    function _evaluateRegex() {
+    function _evaluateRegex(regex, testStrings) {
         let results = [];
 
         //
@@ -37,6 +13,15 @@ const regexEvaluator = (function () {
         //
         // TODO: Make this function work for named capture groups
         // 
+
+        if(regex == undefined){
+            return testStrings.join("\n");
+        }
+
+        if(testStrings == undefined){
+            return "";
+        }
+
         testStrings.forEach((str) => {
             let result = "";
             let index = 0;
@@ -75,11 +60,11 @@ const regexEvaluator = (function () {
                     }
                     break;
                 }
+       
             }
             results.push(result);
         })
-
-        return results;
+        return results.join("\n");
     }
 
     function _escapeHTML(unsafe) {
@@ -90,31 +75,18 @@ const regexEvaluator = (function () {
             .replaceAll("'", '&#039;');
     }
 
-
-    function getTestStrings() {
-        return testStrings;
-    }
-
     function regexUpdatedHandler() {
-        setRegex(regexInput.getRegexString());
-        testStringsInput.setTestStringsOutputElement(_evaluateRegex());
+        testStringsInput.setTestStringsOutputElement(_evaluateRegex(regexInput.getRegex(),
+            testStringsInput.getTestStrings()));
     }
 
     function testStringUpdatedHandler() {
-        setTestStrings(testStringsInput.getTestStrings());
-        testStringsInput.setTestStringsOutputElement(_evaluateRegex());
-    }
-
-    function init() {
-        setRegex("");
+        let output = _evaluateRegex(regexInput.getRegex(), testStringsInput.getTestStrings());
+        testStringsInput.setTestStringsOutputElement(output);
     }
 
     return {
         "init": init,
-        "setRegex": setRegex,
-        "getRegex": getRegex,
-        "setTestStrings": setTestStrings,
-        "getTestStrings": getTestStrings,
         "regexUpdatedHandler": regexUpdatedHandler,
         "testStringUpdatedHandler": testStringUpdatedHandler
     }
@@ -132,22 +104,32 @@ const regexEvaluator = (function () {
 // see: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/
 const testStringsInput = (function () {
     let testStringsInputElement, testStringsOutputElement;
+    let testStrings = []
     const observers = []
+
 
     function init(_testStringsInputElement, _testStringsOutputElement) {
         testStringsInputElement = _testStringsInputElement;
         testStringsOutputElement = _testStringsOutputElement;
-
-        testStringsOutputElement.innerHTML = escapeHTML(testStringsInputElement.value);
-
+        setTestStrings(testStringsInputElement.value);
+        testStringsOutputElement.innerText = _escapeHTML(testStrings);
         setupEventListeners();
+    }
+
+    function setTestStrings(_testStrings){
+        let lines = [];
+        _testStrings.split("\n").forEach((line)=>{
+            lines.push(line);
+        })
+        testStrings = lines;
+        _notifyObservers();
     }
 
     function setupEventListeners() {
         testStringsInputElement.addEventListener("input", (event) => {
             event.preventDefault();
+            setTestStrings(testStringsInputElement.value);
             syncscroll();
-            _notifyObservers();
         })
 
         testStringsInputElement.addEventListener("scroll", (event) => {
@@ -155,13 +137,15 @@ const testStringsInput = (function () {
         });
     }
 
-    function escapeHTML(unsafe) {
-        return unsafe.replaceAll('&', '&amp;')
+    function _escapeHTML(unsafe) {
+        return unsafe.forEach((unsafe)=> {unsafe.replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
             .replaceAll('>', '&gt;')
             .replaceAll('"', '&quot;')
             .replaceAll("'", '&#039;');
+        });
     }
+    
 
     function syncscroll() {
         testStringsOutputElement.scrollTop = testStringsInputElement.scrollTop;
@@ -169,11 +153,11 @@ const testStringsInput = (function () {
     }
 
     function getTestStrings() {
-        return testStringsInputElement.value;
+        return testStrings;
     }
 
-    function setTestStringsOutputElement(value) {
-        testStringsOutputElement.innerHTML = value;
+    function setTestStringsOutputElement(raw_html) {
+        testStringsOutputElement.innerHTML = raw_html;
         syncscroll();
     }
 
@@ -194,11 +178,11 @@ const testStringsInput = (function () {
 
     return {
         "init": init,
+        "setTestStrings": setTestStrings,
         "getTestStrings": getTestStrings,
         "registerObserver": registerObserver,
         "unregisterObserver": unregisterObserver,
         "setTestStringsOutputElement": setTestStringsOutputElement
-
     }
 })();
 
@@ -207,22 +191,39 @@ const testStringsInput = (function () {
 // TODO: Make regex savable
 const regexInput = (function () {
     let regexInputElement;
+    let regex;
     const observers = []
 
+    function setRegex(expr, flags = "g") {
+        if (expr.length > 0) {
+            try {
+                regex = new RegExp(expr, flags)
+            } catch (e) {
+                regex = null;
+            }
+        } else {
+            regex = null;
+        }
+
+        _notifyObservers();
+    }
+
+    
     function setupEventListeners() {
         regexInputElement.addEventListener("input", (event) => {
             event.preventDefault();
-            _notifyObservers();
+            setRegex(regexInputElement.value);
         })
     }
 
     function init(_regexInputElement) {
         regexInputElement = _regexInputElement;
+        setRegex(regexInputElement.value);
         setupEventListeners();
     }
 
-    function getRegexString() {
-        return regexInputElement.value
+    function getRegex() {
+        return regex;
     }
 
     function registerObserver(fn) {
@@ -242,7 +243,8 @@ const regexInput = (function () {
 
     return {
         "init": init,
-        "getRegexString": getRegexString,
+        "setRegex": setRegex,
+        "getRegex": getRegex,
         "registerObserver": registerObserver,
         "unregisterObserver": unregisterObserver
     }
@@ -250,18 +252,14 @@ const regexInput = (function () {
 
 
 function init() {
-
     const regexInputElement = document.getElementById("regex-input");
     const testStringsInputElement = document.getElementById("test-strings-input");
     const testStringsOutputElement = document.getElementById("test-strings-output");
 
     testStringsInput.init(testStringsInputElement, testStringsOutputElement);
     regexInput.init(regexInputElement);
-
     testStringsInput.registerObserver(regexEvaluator.testStringUpdatedHandler);
     regexInput.registerObserver(regexEvaluator.regexUpdatedHandler);
-
-    regexEvaluator.init();
 
 }
 
