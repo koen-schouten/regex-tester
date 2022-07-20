@@ -98,8 +98,7 @@ export const regexEvaluator = (function () {
             }
             results.push(result);
         })
-
-        console.log(results)
+        
         return results.join("\n");
     }
 
@@ -110,7 +109,6 @@ export const regexEvaluator = (function () {
             .replaceAll('"', '&quot;')
             .replaceAll("'", '&#039;');
     }
-
 
     function init() {
     }
