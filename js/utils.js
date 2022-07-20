@@ -24,13 +24,13 @@ function toBinary(string) {
     return result;
   }
 
-  function UTF16ToBase64(string){
+  export function UTF16ToBase64(string){
     const binary = toBinary(string);
     const encoded = btoa(binary);
     return encoded
   }
 
-  function Base64ToUTF16(){
+  export function Base64ToUTF16(encoded){
     const decoded = atob(encoded);
     const original = fromBinary(decoded);
     return original;
