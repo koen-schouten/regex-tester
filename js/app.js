@@ -1,6 +1,6 @@
 import { regexEvaluator as regexEvaluator} from "./models/regexEvaluator.js"
-import { testStringsInput as testStringsInput } from "./views/testStringInput"
-import { regexInput as regexInput } from "./views/testStringInput"
+import { testStringsInput as testStringsInput } from "./views/testStringInput.js"
+import { regexInput as regexInput } from "./views/regexInput.js"
 
 function init() {
     const regexInputElement = document.getElementById("regex-input");

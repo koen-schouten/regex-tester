@@ -8,7 +8,7 @@
 // This code makes sure that these 2 elements are in sync,
 //
 // see: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/
-const testStringsInput = (function () {
+export const testStringsInput = (function () {
     let testStringsInputElement, testStringsOutputElement;
     let regexEvaluator;
 
