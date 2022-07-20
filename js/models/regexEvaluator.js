@@ -141,8 +141,13 @@ export const regexEvaluator = (function () {
         return testStringLines;
     }
 
+    function getTestStrings(){
+        return testStrings;
+    }
+
     return {
         "init": init,
+        "getTestStrings": getTestStrings,
         "setRegex": setRegex,
         "setTestStrings": setTestStrings,
         "getRegexFlags": getRegexFlags,
