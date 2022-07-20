@@ -134,7 +134,7 @@ export const regexEvaluator = (function () {
     }
 
     function getRegexFlags() {
-        return flags;
+        return regexFlags;
     }
 
     function getTestStringLines() {
