@@ -10,10 +10,6 @@ export const regexSaver = (function(){
         regexEvaluator = _regexEvaluator;
     }
 
-    function _getURL(){
-        return window.location.href;
-    }
-
     function save(){
         const regexFlags = regexEvaluator.getRegexFlags();
         const regexExpr = regexEvaluator.getRegexExpression();
@@ -26,11 +22,6 @@ export const regexSaver = (function(){
         queryParams.set(testStringsSearchParam, UTF16ToBase64(testStrings));
 
         history.replaceState(null, null, "?"+queryParams.toString());
-        
-        
-        console.log("regexFlags: " + UTF16ToBase64(regexFlags));
-        console.log("regexExpr: " + UTF16ToBase64(regexExpr));
-        console.log("testStrings: " + UTF16ToBase64(testStrings));
     }
 
     return{

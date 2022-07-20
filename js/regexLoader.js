@@ -11,11 +11,6 @@ export const regexLoader = (function(){
         const regexFlags = Base64ToUTF16(queryParams.get(regexFlagsSearchParam));
         const regexExpr = Base64ToUTF16(queryParams.get(regexExprSearchParam));
         const testStrings = Base64ToUTF16(queryParams.get(testStringsSearchParam));
-
-        console.log(regexFlags)
-        console.log(regexExpr)
-        console.log(testStrings)
-
         regexEvaluator.setTestStrings(testStrings);
         regexEvaluator.setRegex(regexExpr, regexFlags)
     }

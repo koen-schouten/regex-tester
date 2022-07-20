@@ -1,7 +1,3 @@
-//
-// TODO: Make teststrings savable
-//
-
 // In order to have an Editable Textarea that can also be styled,
 // we need to create 2 seperate elements that are duplicates. 
 // An <textarea> input and a <pre> output that shows the result to the user.

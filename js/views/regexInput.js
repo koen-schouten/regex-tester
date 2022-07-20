@@ -1,5 +1,4 @@
 // TODO: Add menu for picking regex flags
-// TODO: Make regex savable
 export const regexInput = (function () {
     let regexInputElement;
     let regexEvaluator;
