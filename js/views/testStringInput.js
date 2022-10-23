@@ -37,6 +37,10 @@ export const testStringsInput = (function () {
         testStringsOutputElement.scrollLeft = testStringsInputElement.scrollLeft;
     }
 
+    function setTestStringsInputElement(inputString){
+        testStringsInputElement.value = inputString;
+    }
+
 
     function setTestStringsOutputElement(raw_html) {
         testStringsOutputElement.innerHTML = raw_html;
@@ -44,6 +48,7 @@ export const testStringsInput = (function () {
     }
 
     function testStringUpdatedHandler(){
+        setTestStringsInputElement(regexEvaluator.getTestStrings());
         setTestStringsOutputElement(regexEvaluator.evaluateRegex());
     }
 
