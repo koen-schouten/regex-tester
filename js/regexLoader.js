@@ -6,6 +6,8 @@ export const regexLoader = (function(){
     const regexExprSearchParam = "re";
     const testStringsSearchParam = "ts"
 
+    //Loading the data from URL and convert them to strings
+    //Then load the data into the regexevaluator.
     function load(){
         const queryParams = new URLSearchParams(window.location.search);
         const regexFlags = Base64ToUTF16(queryParams.get(regexFlagsSearchParam));
